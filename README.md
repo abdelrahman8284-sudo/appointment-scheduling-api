@@ -53,4 +53,4 @@ The system consists of three main entities:
 2.Configure your database in src/main/resources/application.properties.
 3.Build the project: mvn clean install
 4.Run the application:mvn spring-boot:run
-   
+   ```
