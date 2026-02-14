@@ -35,7 +35,7 @@ public class BookingService {
 		booking.setStatus(BookingStatus.CONFIRMED);		
 		return bookingRepo.save(booking);
 	}
-	
+	 
 	public Booking update(Integer id,Booking booking) {
 		Optional<Booking> bookOp = bookingRepo.findById(id);
 		if(bookOp.isPresent()) {
