@@ -13,6 +13,15 @@ This project provides a complete system for managing the lifecycle of a medical 
 * **MapStruct** (For high-performance DTO mapping)
 * **Lombok** (To reduce boilerplate code)
 * **Swagger/OpenAPI 3** (For API Documentation)
+* **JUnit 5** (Unit Testing)
+* **Mockito** (Mocking Framework)
+
+
+## 🧪 Testing
+* Unit testing for service layer using **JUnit 5** and **Mockito**
+* Covered business rules, validation logic, conflict detection, and failure scenarios
+* Tested transactional booking workflow and exception handling
+
 
 ## ✨ Key Features
 * **Doctor Management:** CRUD operations for doctors and their specializations.
@@ -50,6 +59,8 @@ The system consists of three main entities:
 1. Clone the repository:
    ```bash
   git clone https://github.com/abdelrahman8284-sudo/appointment-scheduling-api
-2.Configure your database in src/main/resources/application.properties.
-3.Build the project: mvn clean install
-4.Run the application:mvn spring-boot:run
+
+2.  Configure your database in src/main/resources/application.properties.
+3.  Build the project: mvn clean install
+4.  Run the application:mvn spring-boot:run
+
