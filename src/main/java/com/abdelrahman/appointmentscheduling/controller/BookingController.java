@@ -1,7 +1,6 @@
 package com.abdelrahman.appointmentscheduling.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import com.abdelrahman.appointmentscheduling.mapper.BookingMapper;
 import com.abdelrahman.appointmentscheduling.service.BookingService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController

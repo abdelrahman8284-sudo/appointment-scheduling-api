@@ -48,7 +48,7 @@ public class BookingService {
 	
 	public List<Booking> findAll(){
 		return bookingRepo.findAll();
-	}
+	} 
 	
 	public Booking findById(Integer id){
 		return bookingRepo.findById(id).orElseThrow(()->new RecordNotFoundException("This Booking not found")); // until handling or else throw not found exception

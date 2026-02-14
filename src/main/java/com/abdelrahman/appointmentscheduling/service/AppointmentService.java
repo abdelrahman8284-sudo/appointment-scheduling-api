@@ -18,6 +18,7 @@ import com.abdelrahman.appointmentscheduling.specification.AppointmentSpecificat
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class AppointmentService {
 
 	@Autowired
@@ -25,25 +26,33 @@ public class AppointmentService {
 	
 	public AppointmentSlot insert(AppointmentSlot slot) {
 		
-		if(timmingIsValid(slot)){
-			slot.setStatus(AppointmentStatus.AVAILABLE);		
-		}
+		validateTiming(slot);
+		slot.setStatus(AppointmentStatus.AVAILABLE);		
+		
 		return slotRepo.save(slot);
 	}
 	
-	public AppointmentSlot update(Integer id,AppointmentSlot slot) {
-		AppointmentSlot currentSlot = null ;
-		Optional<AppointmentSlot> slotOp = slotRepo.findById(id);
-		if(slotOp.isPresent()) {				
-			if(timmingIsValid(slot)) {	
-				currentSlot = slotRepo.save(slot);
-			}
-		}
-		else {
-			throw new RecordNotFoundException("Slot not found") ; // until handling exception
-		}
-		return currentSlot;
+	public AppointmentSlot update(Integer id, AppointmentSlot slot) {
+
+	    AppointmentSlot existing = slotRepo.findById(id)
+	        .orElseThrow(() -> new RecordNotFoundException("Slot not found"));
+
+	    // ممنوع تعديل slot لو already booked أو expired
+	    if (existing.getStatus() == AppointmentStatus.BOOKED ||
+	        existing.getStatus() == AppointmentStatus.EXPIRED) {
+	        throw new RuntimeException("Cannot modify a booked or expired slot");
+	    }
+
+	    existing.setStartTime(slot.getStartTime());
+	    existing.setEndTime(slot.getEndTime());
+	    existing.setDoctor(slot.getDoctor());
+
+	    validateTiming(existing);
+
+	    return slotRepo.save(existing);
 	}
+
+
 	
 	public List<AppointmentSlot> findAll(){
 		return slotRepo.findAll();
@@ -57,37 +66,55 @@ public class AppointmentService {
 		slotRepo.bookSlot(slotId);
 	}
 	
-	private boolean timmingIsValid(AppointmentSlot slot) throws RuntimeException {
-		boolean isValid = true;
-		
-		boolean hasConfilict = slotRepo.findSizeOfConflictingAppointments(
-				slot.getDoctor().getId()
-				,slot.getId()
-				,slot.getStartTime()
-				,slot.getEndTime())>0;
-				
-		if(slot.getEndTime().isBefore(slot.getStartTime())|| slot.getEndTime().isEqual(slot.getStartTime()) || slot.getStartTime().isBefore(LocalDateTime.now())) {
-			isValid =false;
-			throw new TimeNotValidException("endTime should be after startTime or startTime should be after now");
-		} 
-		if(hasConfilict) {
-			isValid = false;
-			throw new TimeNotValidException("This doctor already has an appointment during this period");
-		}
+	private void validateTiming(AppointmentSlot slot) {
 
-		return isValid;
+	    if (slot.getStartTime() == null || slot.getEndTime() == null) {
+	        throw new RuntimeException("Start time and end time must not be null");
+	    }
+
+	    if (slot.getDoctor() == null) {
+	        throw new RuntimeException("Doctor must not be null");
+	    }
+
+	    if (slot.getEndTime().isBefore(slot.getStartTime())
+	            || slot.getEndTime().isEqual(slot.getStartTime())
+	            || slot.getStartTime().isBefore(LocalDateTime.now())) {
+
+	        throw new TimeNotValidException(
+	                "endTime should be after startTime and startTime should be after now"
+	        );
+	    }
+
+	    boolean hasConflict = slotRepo.findSizeOfConflictingAppointments(
+	            slot.getDoctor().getId(),
+	            slot.getId(),
+	            slot.getStartTime(),
+	            slot.getEndTime() 
+	    ) > 0;
+
+	    if (hasConflict) {
+	        throw new TimeNotValidException(
+	                "This doctor already has an appointment during this period"
+	        );
+	    }
 	}
+
+
 	
 	public List<AppointmentSlot> searchSlots (Integer doctorId,String specialization){
-		Specification<AppointmentSlot> spec =Specification.where(AppointmentSpecification.availableSlots());
-		
-		if(doctorId!=null) {
-			spec = Specification.where(AppointmentSpecification.availablesWithDoctorId(doctorId));
+		Specification<AppointmentSlot> spec = 
+			    Specification.where(AppointmentSpecification.availableSlots());
+
+		if (doctorId != null) {
+		    spec = spec.and(AppointmentSpecification.availablesWithDoctorId(doctorId));
 		}
-		
-		if(specialization!=null) {
-			spec = Specification.where(AppointmentSpecification.hasSpecialization(specialization));
+
+		if (specialization != null) {
+		    spec = spec.and(AppointmentSpecification.hasSpecialization(specialization));
 		}
+
+
 		return slotRepo.findAll(spec);
 	}
+	
 }

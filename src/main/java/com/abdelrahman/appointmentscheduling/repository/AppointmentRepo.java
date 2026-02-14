@@ -34,7 +34,7 @@ public interface AppointmentRepo extends JpaRepository<AppointmentSlot, Integer>
 			,@Param("newStart") LocalDateTime newStart
 			,@Param("newEnd") LocalDateTime newEnd);
 	
-	@Query("UPDATE  AppointmentSlot a SET a.status ='EXPIRED' WHERE a.status ='AVAILABLE' AND a.endTime< :now")
+	@Query("UPDATE  AppointmentSlot a SET a.status ='EXPIRED' WHERE a.status ='AVAILABLE' OR a.status  AND a.endTime< :now")
 	@Modifying
 	@Transactional
 	void expireSlot(LocalDateTime now);
