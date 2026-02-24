@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.abdelrahman.appointmentscheduling.repository.AppointmentRepo;
 
-@Service
+//@Service
 public class AppointmentScheduler {
 
 	@Autowired
