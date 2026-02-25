@@ -36,6 +36,18 @@ public class GlobalExceptionHandling {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(error);
 	}
 	
+	@ExceptionHandler(SlotNotAvailableException.class)
+	public ResponseEntity<?> handleSlotNotAvailable(SlotNotAvailableException ex,HttpServletRequest http) {
+		String path = http.getRequestURI();
+		ErrorResponse error = new ErrorResponse(
+				ex.getMessage(),
+				Arrays.asList(ex.getLocalizedMessage()),
+				HttpStatus.CONFLICT.value(),
+				path
+				);
+		return ResponseEntity.status(HttpStatus.CONFLICT.value()).body(error);
+	}
+	
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> handleRuntime(RuntimeException ex,HttpServletRequest http) {
 		String path = http.getRequestURI();

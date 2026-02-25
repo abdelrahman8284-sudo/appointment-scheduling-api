@@ -1,7 +1,6 @@
 package com.abdelrahman.appointmentscheduling.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -23,13 +22,12 @@ public class DoctorService {
 	}
 	
 	public Doctor update(Integer id,Doctor doctor) {
-		Optional<Doctor> doc = docRepo.findById(id);
-		if(doc.isPresent()) {
-			return docRepo.save(doctor);
-		}
-		else {
-			throw new RecordNotFoundException("This Doctor not found !") ; // until handling exception
-		}
+		Doctor currentDoctor = docRepo.findById(id).orElseThrow(()->new RecordNotFoundException("This Doctor not found !"));
+		currentDoctor.setActive(true);
+		currentDoctor.setName(doctor.getName());
+		currentDoctor.setSpecialization(doctor.getSpecialization());
+		
+		return docRepo.save(currentDoctor);
 	}
 	
 	public List<Doctor> findAll(){

@@ -1,7 +1,6 @@
 package com.abdelrahman.appointmentscheduling.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,7 @@ import com.abdelrahman.appointmentscheduling.entities.Booking;
 import com.abdelrahman.appointmentscheduling.enums.AppointmentStatus;
 import com.abdelrahman.appointmentscheduling.enums.BookingStatus;
 import com.abdelrahman.appointmentscheduling.exception.RecordNotFoundException;
+import com.abdelrahman.appointmentscheduling.exception.SlotNotAvailableException;
 import com.abdelrahman.appointmentscheduling.repository.BookingRepo;
 
 import jakarta.transaction.Transactional;
@@ -29,22 +29,30 @@ public class BookingService {
 		AppointmentSlot slot = slotService.findById(booking.getSlot().getId());	
 		// التأكد من حالة ال status
 		if(!slot.getStatus().equals(AppointmentStatus.AVAILABLE)) {
-			throw new RuntimeException("Slot is not avilable");
+			throw new SlotNotAvailableException("Slot is not avilable");
 		}
 		
 	    slotService.bookStatus(booking.getSlot().getId());
 		booking.setStatus(BookingStatus.CONFIRMED);		
 		return bookingRepo.save(booking);
 	}
-	 
+	@Transactional 
 	public Booking update(Integer id,Booking booking) {
-		Optional<Booking> bookOp = bookingRepo.findById(id);
-		if(bookOp.isPresent()) {
-			return bookingRepo.save(booking);
+		Booking currentBooking = bookingRepo.findById(id).orElseThrow(()->new RecordNotFoundException("This Booking is not found"));
+		if (booking.getSlot() != null &&
+		        !booking.getSlot().getId().equals(currentBooking.getSlot().getId())) {
+			AppointmentSlot newSlot = slotService.findById(booking.getSlot().getId());	
+			if(!newSlot.getStatus().equals(AppointmentStatus.AVAILABLE)) {
+				throw new SlotNotAvailableException("Slot is not avilable");
+			}
+			// لازم ارجعه available لانه اتغير
+			currentBooking.getSlot().setStatus(AppointmentStatus.AVAILABLE);
+			slotService.bookStatus(newSlot.getId());
+			currentBooking.setSlot(newSlot);
+
 		}
-		else {
-			throw new RecordNotFoundException("This Booking is not found") ; // until handling exception
-		}
+		currentBooking.setPatientName(booking.getPatientName());		
+		return bookingRepo.save(currentBooking);
 	}
 	
 	public List<Booking> findAll(){
