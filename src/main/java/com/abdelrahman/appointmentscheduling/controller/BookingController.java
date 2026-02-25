@@ -2,7 +2,6 @@ package com.abdelrahman.appointmentscheduling.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,17 +19,17 @@ import com.abdelrahman.appointmentscheduling.service.BookingService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/book")
 @Tag(name="Booking")
+@RequiredArgsConstructor
 public class BookingController {
 
-	@Autowired
-	private BookingService bService;
 	
-	@Autowired
-	private BookingMapper mapper;
+	private final BookingService bService;
+	private final BookingMapper mapper;
 	
 	@Operation(summary ="Create Booking",description = "ِAppointment must be available")
 	@PostMapping

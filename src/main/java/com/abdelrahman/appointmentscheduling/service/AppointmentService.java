@@ -2,9 +2,7 @@ package com.abdelrahman.appointmentscheduling.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +14,14 @@ import com.abdelrahman.appointmentscheduling.repository.AppointmentRepo;
 import com.abdelrahman.appointmentscheduling.specification.AppointmentSpecification;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AppointmentService {
 
-	@Autowired
-	private AppointmentRepo slotRepo;
+	private final AppointmentRepo slotRepo;
 	
 	public AppointmentSlot insert(AppointmentSlot slot) {
 		

@@ -3,18 +3,19 @@ package com.abdelrahman.appointmentscheduling.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abdelrahman.appointmentscheduling.entities.Doctor;
 import com.abdelrahman.appointmentscheduling.exception.RecordNotFoundException;
 import com.abdelrahman.appointmentscheduling.repository.DoctorRepo;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class DoctorService {
 
-	@Autowired
-	private DoctorRepo docRepo;
+	private final DoctorRepo docRepo;
 	
 	public Doctor insert(Doctor doctor) {
 		doctor.setActive(true);

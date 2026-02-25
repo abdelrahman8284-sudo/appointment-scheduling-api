@@ -3,7 +3,6 @@ package com.abdelrahman.appointmentscheduling.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abdelrahman.appointmentscheduling.entities.AppointmentSlot;
@@ -14,14 +13,16 @@ import com.abdelrahman.appointmentscheduling.exception.RecordNotFoundException;
 import com.abdelrahman.appointmentscheduling.repository.BookingRepo;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class BookingService {
 
-	@Autowired
-	private BookingRepo bookingRepo;
-	@Autowired
-	private AppointmentService slotService;
+	
+	private final BookingRepo bookingRepo;
+	private final AppointmentService slotService;
+	
 	@Transactional
 	public Booking book(Booking booking) {
 		// لازم نجيبه من ال database الاول 
