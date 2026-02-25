@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abdelrahman.appointmentscheduling.dto.BookingDto;
@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/api/v1/bookings")
 @Tag(name="Booking")
 @RequiredArgsConstructor
 public class BookingController {
@@ -38,7 +38,7 @@ public class BookingController {
 		return ResponseEntity.ok(mapper.toDto(booking));
 	}
 	@Operation(summary ="Update Booking")
-	@PutMapping("/id/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody BookingDto dto){
 		Booking booking= bService.update(id,mapper.toEntity(dto));
 		return ResponseEntity.ok(mapper.toDto(booking));
@@ -50,14 +50,14 @@ public class BookingController {
 		return ResponseEntity.ok(dtos);
 	}
 	@Operation(summary ="Find Booking by id")
-	@GetMapping("/id/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Integer id){
 		Booking booking = bService.findById(id);
 		return ResponseEntity.ok(mapper.toDto(booking));
 	}
 	@Operation(summary = "Cancel Booking by Id")
-	@PutMapping("/cancel")
-	public void cancelBooking(@RequestParam Integer id) {
+	@PatchMapping("/{id}/cancel")
+	public void cancelBooking(@PathVariable Integer id) {
 		bService.cancelBook(id);
 	}
 	

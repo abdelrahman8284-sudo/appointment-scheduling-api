@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/slot")
+@RequestMapping("/api/v1/slots")
 @Tag(name = "Appointment")
 @RequiredArgsConstructor
 public class AppointmentController {
@@ -39,7 +39,7 @@ public class AppointmentController {
 		return ResponseEntity.ok(mapper.toDto(slot));
 	}
 	@Operation(summary ="Update slot")
-	@PutMapping("/id/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody AppointmentDto dto){
 		AppointmentSlot slot = slotService.update(id, mapper.toEntity(dto));
 		return ResponseEntity.ok(mapper.toDto(slot));
@@ -51,7 +51,7 @@ public class AppointmentController {
 		return ResponseEntity.ok(slots);
 	}
 	@Operation(summary ="Find by slot id")
-	@GetMapping("/id/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Integer id){
 		AppointmentSlot slot = slotService.findById(id);
 		

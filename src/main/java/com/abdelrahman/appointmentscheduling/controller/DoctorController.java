@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/doctor")
+@RequestMapping("/api/v1/doctors")
 @Tag(name="Doctor")
 @RequiredArgsConstructor
 public class DoctorController {
@@ -34,7 +34,7 @@ public class DoctorController {
 		return ResponseEntity.ok(mapper.toDto(doc));
 	}
 	@Operation(summary = "Update doctor")
-	@PutMapping("/id/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody DoctorDto dto){
 		Doctor doc = docService.update(id, mapper.toEntity(dto));
 		return ResponseEntity.ok(mapper.toDto(doc));
@@ -45,7 +45,7 @@ public class DoctorController {
 		return ResponseEntity.ok(mapper.toListDto(docService.findAll()));
 	}
 	@Operation(summary ="Find Doctor by id")
-	@GetMapping("/id/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Integer id){
 		return ResponseEntity.ok(mapper.toDto(docService.findById(id)));
 	}
