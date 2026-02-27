@@ -275,4 +275,6 @@ You can explore and test all API endpoints from there.
 | status        | VARCHAR     | DEFAULT 'PENDING'         |
 | created_at    | DATETIME    | DEFAULT CURRENT_TIMESTAMP |
 
+## Database Schema (ERD)
+![ERD](screenshots/schema.png)
 
