@@ -16,6 +16,24 @@ The project follows a clean layered architecture and is designed for scalability
 
 ---
 
+## 📋 Table of Contents
+
+- [📌 Description](#-description)
+- [🛠 Tech Stack](#-tech-stack)
+- [🚀 Features](#-features)
+- [📡 API Endpoints](#-api-endpoints)
+  - [🩺 Doctors](#-doctors)
+  - [🕒 Appointment Slots](#-appointment-slots)
+  - [📅 Bookings](#-bookings)
+- [📸 Screenshots](#-screenshots)
+- [🎥 Demo Video](#-demo-video)
+- [⚙️ Installation Guide](#-installation-guide)
+  - [Prerequisites](#1️⃣-prerequisites)
+  - [Clone the Repository](#2️⃣-clone-the-repository)
+  - [Database Configuration](#3️⃣-database-configuration)
+- [🗄 Database Schema](#database-schema)
+- [🗺 Database ERD](#database-schema-erd)
+
 ## 🛠 Tech Stack
 
 - **Java 21**
